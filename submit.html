@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript">
+    function checkForm(form) // Submit button clicked
+    {
+        //
+        // check form input values
+        //
+        form.submitbutton.text = "Please wait...";
+        form.submitbutton.disabled = true;
+        return true;
+    }
+    function enableButton()
+    {
+        this.form.submitbutton.disabled = false;
+    }
+    function disableButton()
+    {
+        this.form.submitbutton.disabled = true;
+    }
+    window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+        window.location.reload();
+    }
+}, false);
+</script>
+    <head>
+        <meta charset="utf-8">
+        <title>Image Uploader</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/css/bootstrap.css" rel="stylesheet">
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    </head>
+    <body onunload="enableButton();" onload="enableButton();" onpageshow="enableButton();" onpagehide="enableButton();">
+        <div id="page" class="page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12 text-center">
+                        <!-- section title -->
+                        <h2>Colin and Jessica's Picture Frame</h2>
+                        <!-- big paragraph -->
+                        <p class="big-para">Send us an image and a message! It will automatically be added to our electronic picture frame!</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6 col-sm-12 col-xs-12 ">
+
+                        <!-- contact form -->
+                        <div class="contact-form">
+
+                            <form class="clearfix" accept-charset="utf-8" method="post" action="/cgi-bin/pictureframe.cgi" enctype="multipart/form-data" onsubmit="return checkForm(this);">
+
+                                <div class="row">
+                                    <div class="col-sm-6 form-group wow fadeInDown" data-wow-delay="700ms" data-wow-duration="1000ms">
+                                        <label for="exampleInputEmail1">Name:</label>
+                                        <input type="text" class="form-control" name="name" id="exampleInputEmail1" placeholder="name">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 form-group wow fadeInDown" data-wow-delay="1000ms" data-wow-duration="1000ms">
+
+                                        <label for="exampleTextarea">Message:</label>
+                                        <textarea class="form-control" name = "message" id="exampleTextarea" rows="3" placeholder="Message"></textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 form-group">
+                                        <label for="exampleInputFile">Choose a picture</label>
+                                        <input type="file" name="file_source" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                                        <small id="fileHelp" class="form-text text-muted">Choose a picture from your phone or computer.</small>
+                                    </div>
+                                </div>
+                                <!-- submit button -->
+                                <button class="btn btn-success btn-lg btn-block wow fadeInDown" data-wow-delay="1200ms" data-wow-duration="1000ms" type="submit" id="submitbutton">Send Picture</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
