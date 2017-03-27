@@ -8,7 +8,7 @@ Upload images and view them.
 
 `pictureframe.cgi` receives the form data from `submit.html` in the multipart encoded POST request. The users name, message, and the name of the picture are stored in an SQLite3 database at the location supplied by the user.
 
-`pictureframe_viwer.cgi` queries the SQLite3 database for a picture that hasn't been displayed yet and is shown in a fullscreen browser view. The user must supply the correct password in the URI query string to access the pictures.
+`pictureframe_viewer.cgi` queries the SQLite3 database for a picture that hasn't been displayed yet and is shown in a fullscreen browser view. The user must supply the correct password in the URI query string to access the pictures.
 
 ### Installation
 Ensure that sqlite3 and libexif -dev libraries are installed on your OS. Twitter's bootstrap CSS should also be installed in your webservers directory. If not, copy the `bootstrap.css` file in this repo to `/css/` in your webservers root directory.
