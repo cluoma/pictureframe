@@ -13,13 +13,13 @@
 sqlite3 *open_database()
 {
     sqlite3 *db;
-    char *db_location = SQLITE_DB_FILE;
 
-    int rc = sqlite3_open(db_location, &db);
+    int rc = sqlite3_open(SQLITE_DB_FILE, &db);
 
     if( rc )
     {
         // Couldn't open
+        sqlite3_close(db);
         return NULL;
     }
     else
@@ -66,6 +66,7 @@ int reset_shown(sqlite3 *db)
     int rc = sqlite3_prepare_v2(db, sql, -1, &results, 0);
     if (rc != SQLITE_OK)
     {
+        sqlite3_finalize(results);
         return 0;
     }
 
@@ -86,6 +87,7 @@ int set_shown(sqlite3 *db, int id)
     if (rc != SQLITE_OK)
     {
         return 0;
+        sqlite3_finalize(results);
     }
 
     sqlite3_step(results);
@@ -122,9 +124,9 @@ int add_entry_to_db(int time,
     {
         return 0;
     }
-    sqlite3_bind_text(results, 1, name, (int)strlen(name), SQLITE_TRANSIENT);
-    sqlite3_bind_text(results, 2, message, (int)strlen(message), SQLITE_TRANSIENT);
-    sqlite3_bind_text(results, 3, filename, (int)strlen(filename), SQLITE_TRANSIENT);
+    sqlite3_bind_text(results, 1, name, (int)name_len, SQLITE_TRANSIENT);
+    sqlite3_bind_text(results, 2, message, (int)message_len, SQLITE_TRANSIENT);
+    sqlite3_bind_text(results, 3, filename, (int)filename_len, SQLITE_TRANSIENT);
     sqlite3_bind_int(results, 4, time);
 
     sqlite3_step(results);
@@ -137,8 +139,7 @@ int add_entry_to_db(int time,
 
 struct picture_data *get_random_entry()
 {
-    struct picture_data *picture_data = malloc(sizeof(struct picture_data));
-
+    struct picture_data *picture_data = NULL;
     sqlite3_stmt *results;
 
     sqlite3 *db = open_database();
@@ -158,6 +159,8 @@ struct picture_data *get_random_entry()
     int rc = sqlite3_prepare_v2(db, sql, -1, &results, 0);
     if (rc != SQLITE_OK)
     {
+        sqlite3_finalize(results);
+        sqlite3_close(db);
         return NULL;
     }
 
@@ -165,6 +168,8 @@ struct picture_data *get_random_entry()
     int step = sqlite3_step(results);
     if(step == SQLITE_ROW) // Get first result
     {
+        picture_data = malloc(sizeof(struct picture_data));
+
         int id                  = sqlite3_column_int(results, 0);
         const char *message     = (char *) sqlite3_column_text(results, 1);
         int message_len         = sqlite3_column_bytes(results, 1);
@@ -192,7 +197,6 @@ struct picture_data *get_random_entry()
         sqlite3_finalize(results);
         reset_shown(db);
         sqlite3_close(db);
-        free(picture_data);
         return get_random_entry();
     }
 
