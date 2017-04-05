@@ -166,9 +166,12 @@ int main(int argc, const char * argv[])
 
     int orientation = get_orientation(picture_data->filename);
     if (orientation == 0) {
-        printf("Content-Type: text/plain\r\n\r\n");
-        printf("Could not get orientation from EXIF\n");
-        return 0;
+        // printf("Content-Type: text/plain\r\n\r\n");
+        // printf("Could not get orientation from EXIF\n");
+        // return 0;
+
+        // Could not extract image orientation, set to no rotation
+        orientation = 1;
     }
 
     char *base64image = get_base64_img(picture_data->filename);
