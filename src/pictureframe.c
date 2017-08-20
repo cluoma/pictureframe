@@ -340,6 +340,13 @@ int main(int argc, const char * argv[]) {
 
     print_confirm_page("Success! :D", "Thanks for the picture!");
 
+    #ifdef NOTIFY_WAV
+    if( fork() == 0 )
+    {
+        execlp("notifyme", "notifyme", NOTIFY_WAV, (char *)NULL);
+    }
+    #endif
+
     return 0; // Success
 
     // Exit points
