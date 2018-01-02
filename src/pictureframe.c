@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <math.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "pictureframe.h"
 #include "multipart_parser.h"
@@ -341,9 +342,10 @@ int main(int argc, const char * argv[]) {
     print_confirm_page("Success! :D", "Thanks for the picture!");
 
     #ifdef NOTIFY_WAV
+    fflush(stdout);
     if( fork() == 0 )
     {
-        execlp("notifyme", "notifyme", NOTIFY_WAV, (char *)NULL);
+        execlp("sudo", "sudo", "-u", "linaro", "/usr/local/bin/notifyme", NOTIFY_WAV, (char *)NULL);
     }
     #endif
 
